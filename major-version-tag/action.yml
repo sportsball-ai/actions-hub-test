@@ -1,9 +1,10 @@
-name: major-version-tag
+name: 'major version tag'
+description: 'return the major version for a given version'
 inputs:
   version:
     required: true
 runs:
-  using: composite
+  using: 'composite'
   steps:
     - run: |
         version=${{ inputs.version }}
