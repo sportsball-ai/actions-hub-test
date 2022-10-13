@@ -3,10 +3,15 @@ description: 'return the major version for a given version'
 inputs:
   version:
     required: true
+outputs:
+  major_version:
+    description: 'major version of the provided version'
+    value: ${{ steps.set-major-version.outputs.major_version }}
 runs:
   using: 'composite'
   steps:
-    - run: |
+    - id: set-major-version
+      run: |
         version=${{ inputs.version }}
         MAJOR_VERSION=${version:0:2}.0
         echo "major version is $MAJOR_VERSION"
