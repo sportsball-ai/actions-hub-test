@@ -9,5 +9,6 @@ runs:
     - run: |
         version=${{ inputs.version }}
         MAJOR_VERSION=${version:0:2}.0
+        echo "major version is $MAJOR_VERSION"
         echo "::set-output name=major_version::$MAJOR_VERSION"
       shell: bash
