@@ -1,11 +1,11 @@
 name: 'major version tag'
-description: 'return the major version for a given version'
+description: 'return the major version for a given full version'
 inputs:
   version:
     required: true
 outputs:
   major_version:
-    description: 'major version of the provided version'
+    description: 'major version of the provided full version'
     value: ${{ steps.set-major-version.outputs.major_version }}
 runs:
   using: 'composite'
@@ -13,7 +13,7 @@ runs:
     - id: set-major-version
       run: |
         version=${{ inputs.version }}
-        MAJOR_VERSION=${version:0:2}.0
+        MAJOR_VERSION=(${version//./ })
         echo "major version is $MAJOR_VERSION"
-        echo "::set-output name=major_version::$MAJOR_VERSION"
+        echo "major_version=$MAJOR_VERSION" >> $GITHUB_OUTPUT
       shell: bash
