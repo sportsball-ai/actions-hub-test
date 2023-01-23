@@ -17,7 +17,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: ghcr.io/sportsball-ai/txn-cli:${{ inputs.version }}
+      image: ghcr.io/sportsball-ai/txm-cli:${{ inputs.version }}
       credentials:
         username: ${{ github.actor }}
         password: ${{ secrets.GITHUB_TOKEN }}
