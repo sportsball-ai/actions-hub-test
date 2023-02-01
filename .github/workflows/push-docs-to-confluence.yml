@@ -49,7 +49,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: nexus.txm.tools/justmiles/markdown2confluence:latest
+      image: nexus.txm.tools/golang:latest
       credentials:
         username: ${{ secrets.NEXUS_USER_CI_DOCKER }}
         password: ${{ secrets.NEXUS_PASSWORD_CI_DOCKER }}
@@ -64,6 +64,11 @@ jobs:
       publish_url: ${{ steps.publish-to-confluence.outputs.publish_url }}
 
     steps:
+      - name: download and install markdown2confluence
+        run: |
+          curl -LO https://github.com/justmiles/go-markdown2confluence/releases/download/v3.4.6/go-markdown2confluence_3.4.6_linux_x86_64.tar.gz
+          sudo tar -xzvf go-markdown2confluence_3.4.6_linux_x86_64.tar.gz -C /usr/local/bin/ markdown2confluence
+          
       - name: checkout git repo
         uses: actions/checkout@v3
 
