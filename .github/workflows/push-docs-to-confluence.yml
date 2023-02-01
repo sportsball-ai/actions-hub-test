@@ -1,0 +1,100 @@
+# uses https://github.com/justmiles/go-markdown2confluence to publish specified document(s) to Confluence
+name: publish-to-confluence
+on:
+  workflow_call:
+    inputs:
+      comment:
+        description: Add an optional comment to the published page.
+        required: false
+        type: string
+      exclude:
+        description: List of exclude file patterns (regex) that will be applied on markdown file paths.
+        required: false
+        type: string
+      modified_since:
+        description: Only upload files that have modifed in the past n minutes.
+        required: false
+        type: number
+      parent:
+        description: Optional parent page to nest content under.  Separate multiple parent pages with /.
+        required: false
+        default: TXM
+        type: string
+      space:
+        description: Confluence space under which content should be published.  Default TXM.
+        required: false
+        default: TXM
+        type: string
+      title:
+        description: Set the page title on upload (defaults to filename without extension).
+        required: false
+        type: string
+      use_document_title:
+        description: Will use the Markdown document title (# Title) if available.  Default false.
+        required: false
+        default: false
+        type: boolean
+      documents:
+        description: The documents to upload.  Can be a directory of documents or a single file.  Default is README.md.
+        required: false
+        default: README.md
+        type: string
+
+  outputs:
+    publish_url:
+      value: ${{ jobs.publish-to-confluence.outputs.publish_url }}
+
+jobs:
+  publish-to-confluence:
+    runs-on: ubuntu-latest
+
+    container:
+      image: nexus.txm.tools/justmiles/markdown2confluence:latest
+      credentials:
+        username: ${{ secrets.NEXUS_USER_CI_DOCKER }}
+        password: ${{ secrets.NEXUS_PASSWORD_CI_DOCKER }}
+
+    permissions: write-all
+
+    outputs:
+      publish_url: ${{ steps.publish-to-confluence.outputs.publish_url }}
+
+    steps:
+      - name: checkout git repo
+        uses: actions/checkout@v3
+
+      - name: grant permission for unsafe repository
+        run: |
+          git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
+      
+      - name: publish to confluence
+        id: publish-to-confluence
+        if: ${{ inputs.use_document_title == true }}
+        run: |
+          echo "publishing specified documents to Confluence..."
+          PUBLISH_URL=$(markdown2confluence \
+          --comment ${{ inputs.comment }} \
+          --exclude ${{ inputs.exclude }} \
+          --modified-since ${{ inputs.modified_since }} \
+          --parent ${{ inputs.parent }} \
+          --space ${{ inputs.space }} \
+          --title ${{ inputs.title }} \
+          --use-document-title \
+          ${{ inputs.documents }} \
+          echo "document publish_url: $PUBLISH_URL"
+          echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
+          if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
+        if: ${{ inputs.use_document_title == false }}
+        run: |
+          echo "publishing specified documents to Confluence..."
+          publish_url=$(markdown2confluence \
+          --comment ${{ inputs.comment }} \
+          --exclude ${{ inputs.exclude }} \
+          --modified-since ${{ inputs.modified_since }} \
+          --parent ${{ inputs.parent }} \
+          --space ${{ inputs.space }} \
+          --title ${{ inputs.title }} \
+          ${{ inputs.documents }} \
+          echo "document publish_url: $PUBLISH_URL"
+          echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
+          if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
