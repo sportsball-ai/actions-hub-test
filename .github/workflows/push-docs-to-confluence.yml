@@ -53,6 +53,10 @@ jobs:
       credentials:
         username: ${{ secrets.NEXUS_USER_CI_DOCKER }}
         password: ${{ secrets.NEXUS_PASSWORD_CI_DOCKER }}
+      env:
+        CONFLUENCE_USERNAME: oe@tempus-ex.com
+        CONFLUENCE_PASSWORD: ${{ secrets.MARKDOWN_CONFLUENCE }}
+        CONFLUENCE_ENDPOINT: https://epf.atlassian.net/wiki
 
     permissions: write-all
 
@@ -66,12 +70,6 @@ jobs:
       - name: grant permission for unsafe repository
         run: |
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
-      
-      - name: configure environment
-        run: |
-          export CONFLUENCE_USERNAME=oe@tempus-ex.com
-          export CONFLUENCE_PASSWORD=${{ secrets.MARKDOWN_CONFLUENCE}}
-          export CONFLUENCE_ENDPOINT=https://epf.atlassian.net/wiki
 
       - name: publish to confluence with doc title
         id: publish-to-confluence-with-title
