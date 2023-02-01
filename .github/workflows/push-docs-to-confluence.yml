@@ -40,9 +40,9 @@ on:
         default: README.md
         type: string
 
-  outputs:
-    publish_url:
-      value: ${{ jobs.publish-to-confluence.outputs.publish_url }}
+    outputs:
+      publish_url:
+        value: ${{ jobs.publish-to-confluence.outputs.publish_url }}
 
 jobs:
   publish-to-confluence:
