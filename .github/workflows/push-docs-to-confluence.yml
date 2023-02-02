@@ -76,9 +76,18 @@ jobs:
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
       - name: handle inputs
+        id: handle_inputs
         run: |
           echo "parent: ${{ inputs.parent }}"
           echo "title: ${{ inputs.title }}"
-          echo "parent=${parent}" >> $GITHUB_OUTPUT
-          echo "title=${title}" >> $GITHUB_OUTPUT
-          echo $GITHUB_ENV
+          echo "PARENT=${parent}" >> $GITHUB_OUTPUT
+          echo "TITLE=${title}" >> $GITHUB_OUTPUT
+          echo $PARENT
+          echo $TITLE
+          echo $GITHUB_OUTPUT
+
+      - name: print shit
+        env:
+          STUFF: ${{join(steps.handle_inputs.outputs.*, '\n')}}
+        run: |
+          env
