@@ -86,7 +86,13 @@ jobs:
         run: |
           env
           
-  
+      - name: do some conditional printing
+        if: ${{ $parent != '' }}
+        run: echo "parent is $parent"
+        
+      - name: do some more conditional printing
+        if: ${{ $title != '' }}
+        run: echo "title is $title"
   
         
 
