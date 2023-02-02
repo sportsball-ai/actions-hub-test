@@ -18,7 +18,6 @@ on:
       parent:
         description: Optional parent page to nest content under.  Separate multiple parent pages with /.
         required: false
-        default: TXM
         type: string
       space:
         description: Confluence space under which content should be published.  Default TXM.
