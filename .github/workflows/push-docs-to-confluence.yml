@@ -1,5 +1,5 @@
 # uses https://github.com/justmiles/go-markdown2confluence to publish specified document(s) to Confluence
-name: publish-to-confluence
+name: publish-to-confluence-shared-workflow
 on:
   workflow_call:
     inputs:
@@ -60,7 +60,7 @@ jobs:
     permissions: write-all
 
     outputs:
-      publish_url: ${{ steps.publish-to-confluence.outputs.publish_url }}
+      publish_url: ${{ steps.handle-inputs.outputs.publish_url }}
 
     steps:
       - name: download and install markdown2confluence
@@ -76,20 +76,20 @@ jobs:
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
       - name: handle inputs
-        id: handle_inputs
+        id: handle-inputs
         run: |
-          echo "parent: ${{ inputs.parent }}"
-          echo "title: ${{ inputs.title }}"
-          echo "PARENT=${parent}" >> $GITHUB_OUTPUT
-          echo "TITLE=${title}" >> $GITHUB_OUTPUT
-        env:
-          PARENT_INPUT: $PARENT
-          TITLE_INPUT: $TITLE
-          SHIZ: shizzle
-          
+          echo "parent=${{ inputs.parent }}" >> $GITHUB_OUTPUT
+          echo "title=${{ inputs.title }}" >> $GITHUB_OUTPUT
+          echo "publish_url=flibbityfloooo" >> $GITHUB_OUTPUT
+  
+  print-some-shit:
+      needs: publish-to-confluence
+      runs-on: ubuntu-latest
+      steps:
+        - name: print stuff
+          run: |
+            echo "parent is ${{ needs.publish-to-confluence.outputs.parent }}"
+            echo "title is ${{ needs.publish-to-confluence.outputs.title }}"
+            echo "publish_url is ${{ needs.publish-to-confluence.outputs.publish_url }}"
+        
 
-      - name: print shit
-        env:
-          STUFF: ${{join(steps.handle_inputs.outputs.*, '\n')}}
-        run: |
-          env
