@@ -78,8 +78,8 @@ jobs:
       - name: handle inputs
         id: handle-inputs
         run: |
-          echo "parent=${{ inputs.parent }}" >> $GITHUB_OUTPUT
-          echo "title=${{ inputs.title }}" >> $GITHUB_OUTPUT
+          echo "parent=${{ github.event.inputs.parent }}" >> $GITHUB_OUTPUT
+          echo "title=${{ github.event.inputs.title }}" >> $GITHUB_OUTPUT
           echo "publish_url=flibbityfloooo" >> $GITHUB_OUTPUT
   
   print-some-shit:
