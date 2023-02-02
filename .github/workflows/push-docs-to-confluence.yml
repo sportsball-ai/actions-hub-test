@@ -85,7 +85,7 @@ jobs:
           --comment ${{ inputs.comment }} \
           --exclude ${{ inputs.exclude }} \
           --modified-since ${{ inputs.modified_since }} \
-          --parent ${{ inputs.parent }} \
+          --parent ${{ 'inputs.parent' }} \
           --space ${{ inputs.space }} \
           --title ${{ inputs.title }} \
           --use-document-title \
@@ -102,7 +102,7 @@ jobs:
           --comment ${{ inputs.comment }} \
           --exclude ${{ inputs.exclude }} \
           --modified-since ${{ inputs.modified_since }} \
-          --parent ${{ inputs.parent }} \
+          --parent ${{ 'inputs.parent' }} \
           --space ${{ inputs.space }} \
           --title ${{ inputs.title }} \
           ${{ inputs.documents }} \
