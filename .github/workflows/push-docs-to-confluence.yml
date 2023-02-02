@@ -81,6 +81,4 @@ jobs:
           echo "title: ${{ inputs.title }}"
           echo "PARENT=${parent}" >> $GITHUB_OUTPUT
           echo "TITLE=${title}" >> $GITHUB_OUTPUT
-          echo $PARENT
-          echo $TITLE
-          echo $GITHUB_OUTPUT
+          env
