@@ -46,7 +46,6 @@ on:
 jobs:
   publish-to-confluence:
     runs-on: ubuntu-latest
-    outputs:
 
     container:
       image: nexus.txm.tools/golang:latest
