@@ -88,6 +88,6 @@ jobs:
       steps:
         - name: print stuff
           run: |
-            echo "outputs are ${{ needs.publish-to-confluence.outputs.* }}"
+            echo "outputs are ${{ join(steps.handle-inputs.outputs.*, '\n') }}"
         
 
