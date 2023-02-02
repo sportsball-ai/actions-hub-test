@@ -78,6 +78,7 @@ jobs:
 
       - name: publish to confluence
         run: |
-          if [ ${{ inputs.parent }}+x ]; then export parent=${{ inputs.parent }}; fi
+          parent=${{ inputs.parent }}
+          if [ ${parent+x} ]; then export parent=${{ inputs.parent }}; fi
           echo $parent
           
