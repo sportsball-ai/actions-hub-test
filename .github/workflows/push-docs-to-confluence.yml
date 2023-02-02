@@ -76,8 +76,9 @@ jobs:
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
       - name: handle inputs
-        if: github.event.inputs.parent != ''
         run: |
           echo "parent=${{ inputs.parent }}" >> $GITHUB_OUTPUT
+          echo "title=${{ inputs.title }}" >> $GITHUB_OUTPUT
           echo $parent
+          echo $title
           echo $GITHUB_OUTPUT
