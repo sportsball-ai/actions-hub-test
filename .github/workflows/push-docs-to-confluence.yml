@@ -76,36 +76,8 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
-      - name: publish to confluence with doc title
-        id: publish-to-confluence-with-title
-        if: ${{ inputs.use_document_title == true }}
+      - name: publish to confluence
         run: |
-          echo "publishing specified documents to Confluence..."
-          PUBLISH_URL=$(markdown2confluence \
-          --comment ${{ inputs.comment }} \
-          --exclude ${{ inputs.exclude }} \
-          --modified-since ${{ inputs.modified_since }} \
-          --parent ${{ inputs.parent }} \
-          --space ${{ inputs.space }} \
-          --title ${{ inputs.title }} \
-          --use-document-title \
-          ${{ inputs.documents }}) \
-          echo "document publish_url: $PUBLISH_URL"
-          echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
-          if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
-      - name: publish to confluence without doc title
-        id: publish-to-confluence-without-title
-        if: ${{ inputs.use_document_title == false }}
-        run: |
-          echo "publishing specified documents to Confluence..."
-          PUBLISH_URL=$(markdown2confluence \
-          --comment ${{ inputs.comment }} \
-          --exclude ${{ inputs.exclude }} \
-          --modified-since ${{ inputs.modified_since }} \
-          --parent ${{ inputs.parent }} \
-          --space ${{ inputs.space }} \
-          --title ${{ inputs.title }} \
-          ${{ inputs.documents }}) \
-          echo "document publish_url: $PUBLISH_URL"
-          echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
-          if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
+          if [ ${{ inputs.parent+x }} ]; then export parent=${{ inputs.parent }}; fi
+          echo $parent
+          
