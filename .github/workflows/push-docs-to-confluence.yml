@@ -87,11 +87,11 @@ jobs:
           env
           
       - name: do some conditional printing
-        if: ${{ $parent != '' }}
+        if: ${{ env.parent != '' }}
         run: echo "parent is $parent"
-        
+
       - name: do some more conditional printing
-        if: ${{ $title != '' }}
+        if: ${{ env.title != '' }}
         run: echo "title is $title"
   
         
