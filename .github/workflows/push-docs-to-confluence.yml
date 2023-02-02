@@ -40,12 +40,13 @@ on:
         type: string
 
     outputs:
-      publish_url:
-        value: ${{ jobs.publish-to-confluence.outputs.publish_url }}
+      confluence_url:
+        value: ${{ jobs.publish-to-confluence.outputs.confluence_url }}
 
 jobs:
   publish-to-confluence:
     runs-on: ubuntu-latest
+    outputs:
 
     container:
       image: nexus.txm.tools/golang:latest
@@ -74,9 +75,17 @@ jobs:
 
       - name: process inputs
         id: process-inputs
+        env:
+          comment: ${{ inputs.comment }}
+          exclude: ${{ inputs.exclude }}
+          modified_since: ${{ inputs.modified_since }}
+          parent: ${{ inputs.parent }}
+          space: ${{ inputs.space }}
+          title: ${{ inputs.title }}
+          use_document_title: ${{ inputs.use_document_title }}
+          documents: ${{ inputs.documents }}
         run: |
-          echo ${{ inputs.parent }}
-          echo ${{ inputs.space }}
+          env
           
   
   
