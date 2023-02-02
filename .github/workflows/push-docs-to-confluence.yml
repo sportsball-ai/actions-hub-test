@@ -89,7 +89,7 @@ jobs:
           --space ${{ inputs.space }} \
           --title ${{ inputs.title }} \
           --use-document-title \
-          ${{ inputs.documents }} \
+          ${{ inputs.documents }}) \
           echo "document publish_url: $PUBLISH_URL"
           echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
           if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
@@ -105,7 +105,7 @@ jobs:
           --parent ${{ inputs.parent }} \
           --space ${{ inputs.space }} \
           --title ${{ inputs.title }} \
-          ${{ inputs.documents }} \
+          ${{ inputs.documents }}) \
           echo "document publish_url: $PUBLISH_URL"
           echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
           if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
