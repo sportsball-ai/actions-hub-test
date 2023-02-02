@@ -77,8 +77,10 @@ jobs:
 
       - name: handle inputs
         run: |
-          echo "parent=${{ inputs.parent }}" >> $GITHUB_OUTPUT
-          echo "title=${{ inputs.title }}" >> $GITHUB_OUTPUT
-          echo $parent
-          echo $title
+          echo "parent: ${{ inputs.parent }}"
+          echo "title: ${{ inputs.title }}"
+          echo "PARENT=${parent}" >> $GITHUB_OUTPUT
+          echo "TITLE=${title}" >> $GITHUB_OUTPUT
+          echo $PARENT
+          echo $TITLE
           echo $GITHUB_OUTPUT
