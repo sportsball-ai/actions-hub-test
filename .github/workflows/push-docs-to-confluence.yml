@@ -77,7 +77,7 @@ jobs:
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
       - name: handle inputs
-        if: github.event_name == 'workflow_call' && github.event.inputs.parent != ''
+        if: github.event.inputs.parent != ''
         run: |
           echo "parent=${{ inputs.parent }}" >> $GITHUB_OUTPUT
           echo $parent
