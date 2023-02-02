@@ -88,8 +88,6 @@ jobs:
       steps:
         - name: print stuff
           run: |
-            echo "parent is ${{ needs.publish-to-confluence.outputs.parent }}"
-            echo "title is ${{ needs.publish-to-confluence.outputs.title }}"
-            echo "publish_url is ${{ needs.publish-to-confluence.outputs.publish_url }}"
+            echo "outputs are ${{ needs.publish-to-confluence.outputs.* }}"
         
 
