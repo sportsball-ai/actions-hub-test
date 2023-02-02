@@ -1,5 +1,5 @@
 # uses https://github.com/justmiles/go-markdown2confluence to publish specified document(s) to Confluence
-name: publish-to-confluence-shared-workflow
+name: publish-to-confluence-reusable-workflow
 on:
   workflow_call:
     inputs:
@@ -59,9 +59,6 @@ jobs:
 
     permissions: write-all
 
-    outputs:
-      publish_url: ${{ steps.handle-inputs.outputs.publish_url }}
-
     steps:
       - name: download and install markdown2confluence
         run: |
@@ -75,19 +72,13 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
-      - name: handle inputs
-        id: handle-inputs
+      - name: process inputs
+        id: process-inputs
         run: |
-          echo "parent=${{ github.event.inputs.parent }}" >> $GITHUB_OUTPUT
-          echo "title=${{ github.event.inputs.title }}" >> $GITHUB_OUTPUT
-          echo "publish_url=flibbityfloooo" >> $GITHUB_OUTPUT
+          echo ${{ inputs.parent }}
+          echo ${{ inputs.space }}
+          
   
-  print-some-shit:
-      needs: publish-to-confluence
-      runs-on: ubuntu-latest
-      steps:
-        - name: print stuff
-          run: |
-            echo "outputs are ${{ join(needs.publish-to-confluence.outputs.*, '\n') }}"
+  
         
 
