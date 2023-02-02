@@ -76,9 +76,9 @@ jobs:
         run: |
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
-      - name: publish to confluence
+      - name: handle inputs
+        if: github.event_name == 'workflow_call' && github.event.inputs.parent != ''
         run: |
-          parent=${{ inputs.parent }}
-          if [ ${parent+x} ]; then export parent=${{ inputs.parent }}; fi
+          echo "parent=${{ inputs.parent }}" >> $GITHUB_OUTPUT
           echo $parent
-          
+          echo $GITHUB_OUTPUT
