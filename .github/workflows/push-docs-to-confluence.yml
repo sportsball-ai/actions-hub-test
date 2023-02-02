@@ -18,7 +18,6 @@ on:
       parent:
         description: Optional parent page to nest content under.  Separate multiple parent pages with /.
         required: false
-        default: TXM
         type: string
       space:
         description: Confluence space under which content should be published.  Default TXM.
@@ -49,10 +48,14 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: nexus.txm.tools/justmiles/markdown2confluence:latest
+      image: nexus.txm.tools/golang:latest
       credentials:
         username: ${{ secrets.NEXUS_USER_CI_DOCKER }}
         password: ${{ secrets.NEXUS_PASSWORD_CI_DOCKER }}
+      env:
+        CONFLUENCE_USERNAME: oe@tempus-ex.com
+        CONFLUENCE_PASSWORD: ${{ secrets.MARKDOWN_CONFLUENCE }}
+        CONFLUENCE_ENDPOINT: https://epf.atlassian.net/wiki
 
     permissions: write-all
 
@@ -60,41 +63,24 @@ jobs:
       publish_url: ${{ steps.publish-to-confluence.outputs.publish_url }}
 
     steps:
+      - name: download and install markdown2confluence
+        run: |
+          curl -LO https://github.com/justmiles/go-markdown2confluence/releases/download/v3.4.6/go-markdown2confluence_3.4.6_linux_x86_64.tar.gz
+          tar -xzvf go-markdown2confluence_3.4.6_linux_x86_64.tar.gz -C /usr/local/bin/ markdown2confluence
+
       - name: checkout git repo
         uses: actions/checkout@v3
 
       - name: grant permission for unsafe repository
         run: |
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
-      
-      - name: publish to confluence
-        id: publish-to-confluence
-        if: ${{ inputs.use_document_title == true }}
+
+      - name: handle inputs
         run: |
-          echo "publishing specified documents to Confluence..."
-          PUBLISH_URL=$(markdown2confluence \
-          --comment ${{ inputs.comment }} \
-          --exclude ${{ inputs.exclude }} \
-          --modified-since ${{ inputs.modified_since }} \
-          --parent ${{ inputs.parent }} \
-          --space ${{ inputs.space }} \
-          --title ${{ inputs.title }} \
-          --use-document-title \
-          ${{ inputs.documents }} \
-          echo "document publish_url: $PUBLISH_URL"
-          echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
-          if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
-        if: ${{ inputs.use_document_title == false }}
-        run: |
-          echo "publishing specified documents to Confluence..."
-          publish_url=$(markdown2confluence \
-          --comment ${{ inputs.comment }} \
-          --exclude ${{ inputs.exclude }} \
-          --modified-since ${{ inputs.modified_since }} \
-          --parent ${{ inputs.parent }} \
-          --space ${{ inputs.space }} \
-          --title ${{ inputs.title }} \
-          ${{ inputs.documents }} \
-          echo "document publish_url: $PUBLISH_URL"
-          echo "publish_url=$PUBLISH_URL" >> $GITHUB_OUTPUT
-          if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
+          echo "parent: ${{ inputs.parent }}"
+          echo "title: ${{ inputs.title }}"
+          echo "PARENT=${parent}" >> $GITHUB_OUTPUT
+          echo "TITLE=${title}" >> $GITHUB_OUTPUT
+          echo $PARENT
+          echo $TITLE
+          echo $GITHUB_OUTPUT
