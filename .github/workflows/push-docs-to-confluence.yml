@@ -84,9 +84,9 @@ jobs:
           use_document_title: ${{ inputs.use_document_title }}
           documents: ${{ inputs.documents }}
         run: |
-          if [ ${{ inputs.use_document_title == true }}]; then
+           if [ ${{ inputs.use_document_title }} == true ]; then
             markdown2confluence --space ${{ inputs.space }} --parent ${{ inputs.parent }} --use-document-title ${{ inputs.documents }}
-          fi
+           fi
   
         
 
