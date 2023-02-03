@@ -75,7 +75,7 @@ jobs:
       - name: process inputs
         id: process-inputs
         env:
-          CONFLUENCE_USERNAME: oe@tempus-ex.com
+          CONFLUENCE_USERNAME: opex@tempus-ex.com
           CONFLUENCE_PASSWORD: ${{ secrets.MARKDOWN_CONFLUENCE }}
           CONFLUENCE_ENDPOINT: https://epf.atlassian.net/wiki
           comment: ${{ inputs.comment }}
