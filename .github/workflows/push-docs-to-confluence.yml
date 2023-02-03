@@ -53,7 +53,7 @@ jobs:
         username: ${{ secrets.NEXUS_USER_CI_DOCKER }}
         password: ${{ secrets.NEXUS_PASSWORD_CI_DOCKER }}
       env:
-        CONFLUENCE_USERNAME: oe@tempus-ex.com
+        CONFLUENCE_USERNAME: opex@tempus-ex.com
         CONFLUENCE_PASSWORD: ${{ secrets.MARKDOWN_CONFLUENCE }}
         CONFLUENCE_ENDPOINT: https://epf.atlassian.net/wiki
 
@@ -75,9 +75,6 @@ jobs:
       - name: process inputs
         id: process-inputs
         env:
-          CONFLUENCE_USERNAME: opex@tempus-ex.com
-          CONFLUENCE_PASSWORD: ${{ secrets.MARKDOWN_CONFLUENCE }}
-          CONFLUENCE_ENDPOINT: https://epf.atlassian.net/wiki
           comment: ${{ inputs.comment }}
           exclude: ${{ inputs.exclude }}
           modified_since: ${{ inputs.modified_since }}
@@ -87,5 +84,8 @@ jobs:
           use_document_title: ${{ inputs.use_document_title }}
           documents: ${{ inputs.documents }}
         run: |
-          markdown2confluence --space ${{ inputs.space }} ${{ inputs.documents }}
+          markdown2confluence --space ${{ inputs.space }} --parent ${{ inputs.parent }} ${{ inputs.documents }}
           
+  
+        
+
