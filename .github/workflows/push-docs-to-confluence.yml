@@ -87,8 +87,8 @@ jobs:
           echo "publishing specified document(s) to Confluence..."
           echo "will run the following command:"
           if [[ "${{ inputs.use_document_title }}" == "true" ]]; then
-            echo "markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified_since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} --use-document-title $documents"
+            markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified_since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} --use-document-title $documents
           else
-            echo "markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified_since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} $documents"
+            markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified_since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} $documents
           fi
         shell: bash
