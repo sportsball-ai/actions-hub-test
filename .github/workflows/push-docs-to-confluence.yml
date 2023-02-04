@@ -90,4 +90,5 @@ jobs:
             echo "markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified_since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} --use-document-title $documents"
           else
             echo "markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified_since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} $documents"
+          fi
         shell: bash
