@@ -62,8 +62,9 @@ jobs:
     steps:
       - name: download and install markdown2confluence
         run: |
-          curl -u ${{secrets.NEXUS_USER_CI_RAW}}:${{secrets.NEXUS_PASSWORD_CI_RAW}} https://nexus.txm.tools/repository/raw-txm/go-markdown2confluence_3.4.6_linux_x86_64.tar.gz
+          curl -u ${{secrets.NEXUS_USER_CI_RAW}}:${{secrets.NEXUS_PASSWORD_CI_RAW}} https://nexus.txm.tools/repository/raw-txm/go-markdown2confluence_3.4.6_linux_x86_64.tar.gz --output go-markdown2confluence_3.4.6_linux_x86_64.tar.gz
           tar -xzvf go-markdown2confluence_3.4.6_linux_x86_64.tar.gz -C /usr/local/bin/ markdown2confluence
+        shell: bash
 
       - name: checkout git repo
         uses: actions/checkout@v3
