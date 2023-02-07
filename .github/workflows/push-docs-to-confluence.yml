@@ -1,4 +1,4 @@
-# uses https://github.com/justmiles/go-markdown2confluence to publish specified document(s) to Confluence
+# uses https://github.com/justmiles/go-markdown2confluence to publish a README.md or other specified document(s) to Confluence
 name: publish-to-confluence-reusable-workflow
 on:
   workflow_call:
@@ -62,18 +62,18 @@ jobs:
     steps:
       - name: download and install markdown2confluence
         run: |
-          curl -LO https://github.com/justmiles/go-markdown2confluence/releases/download/v3.4.6/go-markdown2confluence_3.4.6_linux_x86_64.tar.gz
+          curl -u ${{secrets.NEXUS_USER_CI_RAW}}:${{NEXUS_PASSWORD_CI_RAW}} https://nexus.txm.tools/repository/raw-txm/go-markdown2confluence_3.4.6_linux_x86_64.tar.gz
           tar -xzvf go-markdown2confluence_3.4.6_linux_x86_64.tar.gz -C /usr/local/bin/ markdown2confluence
 
       - name: checkout git repo
         uses: actions/checkout@v3
 
-      - name: grant permission for unsafe repository
+      - name: config global safe directory
         run: |
           git config --global --add safe.directory /__w/${{ github.event.repository.name }}/${{ github.event.repository.name }}
 
-      - name: process inputs
-        id: process-inputs
+      - name: process inputs and publish
+        id: process-inputs-and-publish
         env:
           comment: ${{ inputs.comment }}
           exclude: ${{ inputs.exclude }}
@@ -86,11 +86,16 @@ jobs:
         run: |
           echo "publishing specified document(s) to Confluence..."
           echo "will run the following command:"
+
           if [[ "${{ inputs.use_document_title }}" == "true" ]]; then
             echo "markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified-since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} --use-document-title $documents"
-            markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified-since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} --use-document-title $documents
+            publish_result=$(markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified-since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} --use-document-title $documents)
+            echo "confluence_url=$publish_result" >> $GITHUB_OUTPUT
+            if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
           else
             echo "markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified-since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} $documents"
             markdown2confluence ${comment:+--comment $comment} ${exclude:+--exclude $exclude} ${modified_since:+--modified-since $modified_since} ${parent:+--parent $parent} ${space:+--space $space} ${title:+--title $title} $documents
+            echo "confluence_url=$publish_result" >> $GITHUB_OUTPUT
+            if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi          
           fi
         shell: bash
