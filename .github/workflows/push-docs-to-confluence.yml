@@ -90,13 +90,13 @@ jobs:
 
           if [[ "${{ inputs.use_document_title }}" == "true" ]]; then
             echo "markdown2confluence ${space:+--space \"${space}\"} ${comment:+--comment \"${comment}\"} ${exclude:+--exclude \"${exclude}\"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent \"${parent}\"} ${title:+--title \"${title}\"} --use-document-title $documents"
-            publish_result=$(markdown2confluence ${space:+--space \"${space}\"} ${comment:+--comment \"${comment}\"} ${exclude:+--exclude \"${exclude}\"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent \"${parent}\"} ${title:+--title \"${title}\"} --use-document-title $documents)
+            publish_result=$(markdown2confluence --debug ${space:+--space \"${space}\"} ${comment:+--comment \"${comment}\"} ${exclude:+--exclude \"${exclude}\"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent \"${parent}\"} ${title:+--title \"${title}\"} --use-document-title $documents)
             echo $publish_result
             echo "confluence_url=$publish_result" >> $GITHUB_OUTPUT
             if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
           else
             echo "markdown2confluence ${space:+--space \"${space}\"} ${comment:+--comment \"${comment}\"} ${exclude:+--exclude \"${exclude}\"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent \"${parent}\"} ${title:+--title \"${title}\"} $documents"
-            publish_result=$(markdown2confluence ${space:+--space \"${space}\"} ${comment:+--comment \"${comment}\"} ${exclude:+--exclude \"${exclude}\"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent \"${parent}\"} ${title:+--title \"${title}\"} $documents)
+            publish_result=$(markdown2confluence --debug ${space:+--space \"${space}\"} ${comment:+--comment \"${comment}\"} ${exclude:+--exclude \"${exclude}\"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent \"${parent}\"} ${title:+--title \"${title}\"} $documents)
             echo $publish_result
             echo "confluence_url=$publish_result" >> $GITHUB_OUTPUT
             if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi          
