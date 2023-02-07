@@ -48,7 +48,7 @@ jobs:
     runs-on: ubuntu-latest
 
     container:
-      image: nexus.txm.tools/golang:latest
+      image: nexus.txm.tools/golang:1.18.2
       credentials:
         username: ${{ secrets.NEXUS_USER_CI_DOCKER }}
         password: ${{ secrets.NEXUS_PASSWORD_CI_DOCKER }}
