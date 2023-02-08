@@ -3,6 +3,10 @@ name: publish-to-confluence-reusable-workflow
 on:
   workflow_call:
     inputs:
+      comment:
+        description: (Optional) Add comment to page
+        required: false
+        type: string
       exclude:
         description: List of exclude file patterns (regex) that will be applied on markdown file paths.
         required: false
@@ -72,6 +76,7 @@ jobs:
       - name: process inputs and publish
         id: process-inputs-and-publish
         env:
+          comment: ${{ inputs.comment }}
           exclude: ${{ inputs.exclude }}
           modified_since: ${{ inputs.modified_since }}
           parent: ${{ inputs.parent }}
@@ -82,22 +87,13 @@ jobs:
         run: |
           set -x
           echo "publishing specified document(s) to Confluence..."
-          echo "will run the following command:"
-
-          if [[ "${{ inputs.use_document_title }}" == "true" ]]; then
-            echo markdown2confluence ${space:+--space $space} ${exclude:+--exclude "${exclude}"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent "${parent}"} --use-document-title $documents
-            
-            publish_result=$(markdown2confluence ${space:+--space $space} ${exclude:+--exclude "${exclude}"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent "${parent}"} --use-document-title $documents)
-            
-            echo "publish result is... ${publish_result}"
+          
+          if [[ "${{ inputs.use_document_title }}" == "true" ]]; then  
+            publish_result=$(markdown2confluence ${comment:+--comment "${comment}"} ${exclude:+--exclude "${exclude}"} ${modified_since:+--modified-since $modified_since} ${space:+--space "${space}"} ${parent:+--parent "${parent}"} --use-document-title $documents)
             echo "confluence_url=$publish_result" >> $GITHUB_OUTPUT
             if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi
           else
-            echo "markdown2confluence ${space:+--space $space} ${exclude:+--exclude "${exclude}"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent "${parent}"} ${title:+--title "${title}"} $documents"
-            
-            publish_result=$(markdown2confluence ${space:+--space $space} ${exclude:+--exclude "${exclude}"} ${modified_since:+--modified-since $modified_since} ${parent:+--parent "${parent}"} ${title:+--title "${title}"} $documents)
-            
-            echo "publish result is... ${publish_result}"
+            publish_result=$(markdown2confluence ${comment:+--comment "${comment}"} ${exclude:+--exclude "${exclude}"} ${modified_since:+--modified-since $modified_since} ${space:+--space "${space}"} ${parent:+--parent "${parent}"} ${title:+--title "${title}"} $documents)            
             echo "confluence_url=$publish_result" >> $GITHUB_OUTPUT
             if [[ -z "${GITHUB_OUTPUT}" ]]; then echo "GITHUB_OUTPUT zero length or unset! Aborting"; exit 1; fi          
           fi
