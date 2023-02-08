@@ -80,6 +80,7 @@ jobs:
           use_document_title: ${{ inputs.use_document_title }}
           documents: ${{ inputs.documents }}
         run: |
+          set -x
           echo "publishing specified document(s) to Confluence..."
           echo "will run the following command:"
 
