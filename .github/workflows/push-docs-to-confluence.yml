@@ -31,7 +31,7 @@ on:
       use_document_title:
         description: Will use the Markdown document title (# Title) if available.  Default false.
         required: false
-        default: false
+        default: "false"
         type: string
       documents:
         description: The documents to upload.  Can be a directory of documents or a single file.  Default is README.md.
