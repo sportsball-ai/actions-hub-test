@@ -2,10 +2,8 @@ name: setup-nexus-npm
 inputs:
   username:
     required: true
-    default: ${{ secrets.NEXUS_USER_CI_NPM}}
   password:
     required: true
-    default: ${{ secrets.NEXUS_PASSWORD_CI_NPM }}
 runs:
   using: composite
   steps:
